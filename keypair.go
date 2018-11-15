@@ -49,28 +49,28 @@ func (kp *KeyPair) GetPriKey() *rsa.PrivateKey {
 }
 
 //newBucketKeyPair creates a new signing keypair from private/public keys stored in a GCP bucket
-func newBucketKeyPair(ctx context.Context, bucket, priKey, priKeyPass, pubKey string) (*KeyPair, error) {
+func newBucketKeyPair(ctx context.Context, bc lbcf.ConfigSetting) (*KeyPair, error) {
 	pk1 := new(pub)
 	pk2 := new(pri)
 	keyPair := &KeyPair{pubKey: pk1, priKey: pk2}
 
-	sto, err := stor.NewMgr(ctx)
+	sto, err := stor.NewStorMgr(ctx, bc)
 
 	if err != nil {
 		return nil, err
 	}
 
-	signBytes, err := sto.GetBucketFileData(ctx, bucket, priKey)
+	signBytes, err := sto.GetBucketFileData(ctx, bc.GetConfigValue(ctx, "EnvKpGcpBucket"), bc.GetConfigValue(ctx, "EnvKpPrivateKey"))
 	if err != nil {
 		return nil, err
 	}
 
-	keyPair.priKey.key, err = jwt.ParseRSAPrivateKeyFromPEMWithPassword(signBytes, priKeyPass)
+	keyPair.priKey.key, err = jwt.ParseRSAPrivateKeyFromPEMWithPassword(signBytes, bc.GetConfigValue(ctx, "EnvKpPrivateKeyCredential"))
 	if err != nil {
 		return nil, err
 	}
 
-	verifyBytes, err := sto.GetBucketFileData(ctx, bucket, pubKey)
+	verifyBytes, err := sto.GetBucketFileData(ctx, bc.GetConfigValue(ctx, "EnvKpGcpBucket"), bc.GetConfigValue(ctx, "EnvKpPublicKey"))
 	if err != nil {
 		return nil, err
 	}
@@ -129,7 +129,7 @@ func NewKeyPair(ctx context.Context, bc lbcf.ConfigSetting) (*KeyPair, error) {
 	}
 
 	if bc.GetConfigValue(ctx, "EnvKpType") == "bucket" {
-		kp1, err := newBucketKeyPair(ctx, bc.GetConfigValue(ctx, "EnvKpGcpBucket"), bc.GetConfigValue(ctx, "EnvKpPrivateKey"), bc.GetConfigValue(ctx, "EnvKpPrivateKeyCredential"), bc.GetConfigValue(ctx, "EnvKpPublicKey"))
+		kp1, err := newBucketKeyPair(ctx, bc)
 
 		if err != nil {
 			return nil, err
