@@ -170,21 +170,3 @@ func (kp *KeyPair) DecryptString(ctx context.Context, val string) (string, error
 
 	return string(decmsg), nil
 }
-
-//EncodeB64 encodes a byte array
-func (kp *KeyPair) EncodeB64(ctx context.Context, val []byte) string {
-	return base64.StdEncoding.EncodeToString(val)
-}
-
-//DecodeB64 decodes a base64 string
-func (kp *KeyPair) DecodeB64(ctx context.Context, val string) ([]byte, error) {
-	var data []byte
-
-	data, err := base64.StdEncoding.DecodeString(val)
-
-	if err != nil {
-		return data, err
-	}
-
-	return data, nil
-}
