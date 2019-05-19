@@ -59,6 +59,22 @@ If you intend to use GCP datastore as your backend, then you will require:
 * A GCP storage bucket (private) to store the RSA private/public keys (in the root of the bucket)
 * Your GOOGLE_APPLICATION_CREDENTIALS json credentials key should be created with the following IAM scopes: 'Storage Object Viewer' and 'Storage Object Creator', or 'Storage Object Admin'.
 
+
+### Main Files
+| File | Purpose |
+| ------ | ------ |
+| keypair.go | Logic manager |
+| keypair_test.go | Tests |
+
+### Ancillary Files
+| File | Purpose |
+| ------ | ------ |
+| config.go | Boot package parameters, environment var collection |
+| errors.go | Package error definitions |
+| env | Package environment variables for local/dev installation |
+| gogets | Statements for go-getting required packages |
+
+
    [Dave Grijalva]: <https://github.com/dgrijalva>
    [jwt-go]: <https://github.com/dgrijalva/jwt-go>
    [GCP]: <https://cloud.google.com/>

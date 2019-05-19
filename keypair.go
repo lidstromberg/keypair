@@ -54,8 +54,7 @@ func newBucketKeyPair(ctx context.Context, bc lbcf.ConfigSetting) (*KeyPair, err
 	pk2 := new(pri)
 	keyPair := &KeyPair{pubKey: pk1, priKey: pk2}
 
-	sto, err := stor.NewStorMgr(ctx, bc)
-
+	sto, err := stor.NewMgr(ctx, bc)
 	if err != nil {
 		return nil, err
 	}
@@ -120,7 +119,6 @@ func NewKeyPair(ctx context.Context, bc lbcf.ConfigSetting) (*KeyPair, error) {
 
 	if bc.GetConfigValue(ctx, "EnvKpType") == "local" {
 		kp1, err := newLocalKeyPair(ctx, bc.GetConfigValue(ctx, "EnvKpPrivateKey"), bc.GetConfigValue(ctx, "EnvKpPrivateKeyCredential"), bc.GetConfigValue(ctx, "EnvKpPublicKey"))
-
 		if err != nil {
 			return nil, err
 		}
@@ -130,7 +128,6 @@ func NewKeyPair(ctx context.Context, bc lbcf.ConfigSetting) (*KeyPair, error) {
 
 	if bc.GetConfigValue(ctx, "EnvKpType") == "bucket" {
 		kp1, err := newBucketKeyPair(ctx, bc)
-
 		if err != nil {
 			return nil, err
 		}
@@ -144,7 +141,6 @@ func NewKeyPair(ctx context.Context, bc lbcf.ConfigSetting) (*KeyPair, error) {
 //EncryptBytes uses the keypair to encrypt a byte array
 func (kp *KeyPair) EncryptBytes(ctx context.Context, val []byte) (string, error) {
 	encmsg, err := rsa.EncryptPKCS1v15(rand.Reader, kp.GetPubKey(), val)
-
 	if err != nil {
 		return "", err
 	}
@@ -157,13 +153,11 @@ func (kp *KeyPair) EncryptBytes(ctx context.Context, val []byte) (string, error)
 //DecryptString uses the keypair to decrypt a base64 encrypted string
 func (kp *KeyPair) DecryptString(ctx context.Context, val string) (string, error) {
 	data, err := base64.StdEncoding.DecodeString(val)
-
 	if err != nil {
 		return "", err
 	}
 
 	decmsg, err := rsa.DecryptPKCS1v15(rand.Reader, kp.GetPriKey(), data)
-
 	if err != nil {
 		return "", err
 	}
