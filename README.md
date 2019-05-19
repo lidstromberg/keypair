@@ -49,7 +49,7 @@ export GOOGLE_APPLICATION_CREDENTIALS="/PATH/TO/GCPCREDENTIALS.JSON"
 The following will generate RSA private/public keys (assuming you have openssl installed). You should place a password on the private key when prompted.
 
 ```sh
-$ ssh-keygen -t rsa -b 4096 -f jwt.key
+$ ssh-keygen -t rsa -b 4096 -m PEM -f jwt.key
 $ openssl rsa -in jwt.key -pubout -outform PEM -pubout -out jwt.key.pub
 ```
 
