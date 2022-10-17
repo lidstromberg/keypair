@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/golang-jwt/jwt/v4 v4.4.2
 	github.com/lidstromberg/config v0.1.0
-	github.com/lidstromberg/storage v0.2.1
+	github.com/lidstromberg/storage v0.2.2
 	golang.org/x/net v0.0.0-20221014081412-f15817d10f9b
 )
 

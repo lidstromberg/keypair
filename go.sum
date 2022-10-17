@@ -187,8 +187,8 @@ github.com/lidstromberg/config v0.1.0 h1:oVXeOHdvFWXhd+Y4+PfH+E7n7G3zi0PYK0GyL3O
 github.com/lidstromberg/config v0.1.0/go.mod h1:IvJuPttTHeVmtk9DzQKWx64OmlTZ7gZFJFA6x6r3MXg=
 github.com/lidstromberg/log v0.1.0 h1:0qALy2MjVU3JOvg8uTCkkAIE7yvW6rAzInl0Oc/efM8=
 github.com/lidstromberg/log v0.1.0/go.mod h1:y/L0diqG0L1KXbRX/Sz6+/3bm8pEbjsUccxwxMP+3AI=
-github.com/lidstromberg/storage v0.2.1 h1:hjesWHzBDmuY84THdsWZYKwlZRMhlZM20slspC0lSso=
-github.com/lidstromberg/storage v0.2.1/go.mod h1:TSQAKOUilFIxw/DWpe5CiNQs60Mnoyo54zgxcVL6SQU=
+github.com/lidstromberg/storage v0.2.2 h1:MXosExMLM98eIgwpXmV45DjgvBfttya2JUlWdleTlus=
+github.com/lidstromberg/storage v0.2.2/go.mod h1:TSQAKOUilFIxw/DWpe5CiNQs60Mnoyo54zgxcVL6SQU=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/prometheus/client_model v0.0.0-20190812154241-14fe0d1b01d4/go.mod h1:xMI15A0UPsDsEKsMN9yxemIoYk6Tm2C1GtYGdfGttqA=
 github.com/rogpeppe/fastuuid v1.2.0/go.mod h1:jVj6XXZzXRy/MSR5jhDC/2q6DgLz+nrA6LYCDYWNEvQ=
