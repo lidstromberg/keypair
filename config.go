@@ -29,10 +29,6 @@ func preflight(ctx context.Context, bc lbcf.ConfigSetting) {
 		log.Fatal("Could not parse environment variable EnvKpPublicKey")
 	}
 
-	if bc.GetConfigValue(ctx, "EnvKpPrivateKeyCredential") == "" {
-		log.Fatal("Could not parse environment variable EnvKpPrivateKeyCredential")
-	}
-
 	if bc.GetConfigValue(ctx, "EnvKpType") == "" {
 		log.Fatal("Could not parse environment variable EnvKpType")
 	}
@@ -50,8 +46,6 @@ func preflightConfigLoader() map[string]string {
 	cfm["EnvKpPrivateKey"] = os.Getenv("KP_PRIKEY")
 	//EnvKpPublicKey is the jwt public key
 	cfm["EnvKpPublicKey"] = os.Getenv("KP_PUBKEY")
-	//EnvKpPrivateKeyCredential credential for the jwt private key
-	cfm["EnvKpPrivateKeyCredential"] = os.Getenv("KP_PRIKEYP")
 	//EnvKpType is the source location of the keypairs (local/bucket)
 	cfm["EnvKpType"] = os.Getenv("KP_TYPE")
 
@@ -65,10 +59,6 @@ func preflightConfigLoader() map[string]string {
 
 	if cfm["EnvKpPublicKey"] == "" {
 		log.Fatal("Could not parse environment variable EnvKpPublicKey")
-	}
-
-	if cfm["EnvKpPrivateKeyCredential"] == "" {
-		log.Fatal("Could not parse environment variable EnvKpPrivateKeyCredential")
 	}
 
 	if cfm["EnvKpType"] == "" {

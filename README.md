@@ -16,7 +16,7 @@ See the tests for usage examples.
 
 ## Dependencies and services
 This utilises the following fine pieces of work:
-* [Dave Grijalva]'s [jwt-go] Go implementation of JSON Web Tokens (JWT)
+* [jwt] Go implementation of JSON Web Tokens (JWT)
 * [GCP]'s [Storage Go client]
 
 ## Installation
@@ -34,7 +34,6 @@ You will also need to export (linux/macOS) or create (Windows) some environment 
 export KP_TYPE="bucket"
 export KP_GCP_BUCKET="{{BUCKETNAME}}"
 export KP_PRIKEY="jwt.key"
-export KP_PRIKEYP="{{PRIVATEKEYPASSWORD}}"
 export KP_PUBKEY="jwt.key.pub"
 ```
 ```sh
@@ -46,7 +45,7 @@ export GOOGLE_APPLICATION_CREDENTIALS="/PATH/TO/GCPCREDENTIALS.JSON"
 (See [Google Application Credentials])
 
 #### Private/Public Certs
-The following will generate RSA private/public keys (assuming you have openssl installed). You should place a password on the private key when prompted.
+The following will generate RSA private/public keys (assuming you have openssl installed). Unfortunately the private key should not be password protected at this point (see [RFC1423 Issue] for details).
 
 ```sh
 $ ssh-keygen -t rsa -b 4096 -m PEM -f jwt.key
@@ -61,22 +60,21 @@ If you intend to use GCP datastore as your backend, then you will require:
 
 
 ### Main Files
-| File | Purpose |
-| ------ | ------ |
-| keypair.go | Logic manager |
-| keypair_test.go | Tests |
+| File            | Purpose       |
+|-----------------|---------------|
+| keypair.go      | Logic manager |
+| keypair_test.go | Tests         |
 
 ### Ancillary Files
-| File | Purpose |
-| ------ | ------ |
-| config.go | Boot package parameters, environment var collection |
-| errors.go | Package error definitions |
-| env | Package environment variables for local/dev installation |
-| gogets | Statements for go-getting required packages |
+| File      | Purpose                                                  |
+|-----------|----------------------------------------------------------|
+| config.go | Boot package parameters, environment var collection      |
+| errors.go | Package error definitions                                |
+| env       | Package environment variables for local/dev installation |
+| gogets    | Statements for go-getting required packages              |
 
-
-   [Dave Grijalva]: <https://github.com/dgrijalva>
-   [jwt-go]: <https://github.com/dgrijalva/jwt-go>
+   [RFC1423 Issue]: <https://pkg.go.dev/github.com/golang-jwt/jwt/v4#ParseRSAPrivateKeyFromPEMWithPassword>
+   [jwt]: <https://github.com/golang-jwt/jwt>
    [GCP]: <https://cloud.google.com/>
    [Storage Go client]: <https://cloud.google.com/storage/docs/reference/libraries#client-libraries-install-go>
    [Google Application Credentials]: <https://cloud.google.com/docs/authentication/production#auth-cloud-implicit-go>

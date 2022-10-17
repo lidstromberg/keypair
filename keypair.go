@@ -9,7 +9,7 @@ import (
 	lbcf "github.com/lidstromberg/config"
 	stor "github.com/lidstromberg/storage"
 
-	jwt "github.com/dgrijalva/jwt-go"
+	jwt "github.com/golang-jwt/jwt/v4"
 
 	"crypto/rand"
 	"crypto/rsa"
@@ -64,7 +64,7 @@ func newBucketKeyPair(ctx context.Context, bc lbcf.ConfigSetting) (*KeyPair, err
 		return nil, err
 	}
 
-	keyPair.priKey.key, err = jwt.ParseRSAPrivateKeyFromPEMWithPassword(signBytes, bc.GetConfigValue(ctx, "EnvKpPrivateKeyCredential"))
+	keyPair.priKey.key, err = jwt.ParseRSAPrivateKeyFromPEM(signBytes)
 	if err != nil {
 		return nil, err
 	}
@@ -83,7 +83,7 @@ func newBucketKeyPair(ctx context.Context, bc lbcf.ConfigSetting) (*KeyPair, err
 }
 
 //newLocalKeyPair creates a new signing keypair from private/public keys stored in local storage
-func newLocalKeyPair(ctx context.Context, priKey, priKeyPass, pubKey string) (*KeyPair, error) {
+func newLocalKeyPair(ctx context.Context, priKey, pubKey string) (*KeyPair, error) {
 	pk1 := new(pub)
 	pk2 := new(pri)
 	keyPair := &KeyPair{pubKey: pk1, priKey: pk2}
@@ -93,7 +93,7 @@ func newLocalKeyPair(ctx context.Context, priKey, priKeyPass, pubKey string) (*K
 		return nil, err
 	}
 
-	keyPair.priKey.key, err = jwt.ParseRSAPrivateKeyFromPEMWithPassword(signBytes, priKeyPass)
+	keyPair.priKey.key, err = jwt.ParseRSAPrivateKeyFromPEM(signBytes)
 	if err != nil {
 		return nil, err
 	}
@@ -118,7 +118,7 @@ func NewKeyPair(ctx context.Context, bc lbcf.ConfigSetting) (*KeyPair, error) {
 	var kpr *KeyPair
 
 	if bc.GetConfigValue(ctx, "EnvKpType") == "local" {
-		kp1, err := newLocalKeyPair(ctx, bc.GetConfigValue(ctx, "EnvKpPrivateKey"), bc.GetConfigValue(ctx, "EnvKpPrivateKeyCredential"), bc.GetConfigValue(ctx, "EnvKpPublicKey"))
+		kp1, err := newLocalKeyPair(ctx, bc.GetConfigValue(ctx, "EnvKpPrivateKey"), bc.GetConfigValue(ctx, "EnvKpPublicKey"))
 		if err != nil {
 			return nil, err
 		}
