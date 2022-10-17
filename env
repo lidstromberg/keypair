@@ -4,5 +4,4 @@
 export KP_TYPE="bucket"
 export KP_GCP_BUCKET="{{BUCKETNAME}}"
 export KP_PRIKEY="jwt.key"
-export KP_PRIKEYP="{{PRIVATEKEYPASSWORD}}"
 export KP_PUBKEY="jwt.key.pub"
