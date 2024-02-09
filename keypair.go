@@ -2,6 +2,7 @@ package keypair
 
 import (
 	"encoding/base64"
+	"os"
 	"sync"
 
 	"golang.org/x/net/context"
@@ -13,42 +14,41 @@ import (
 
 	"crypto/rand"
 	"crypto/rsa"
-	"io/ioutil"
 )
 
-//pub holder for a public key
+// pub holder for a public key
 type pub struct {
 	key *rsa.PublicKey
 	mux sync.Mutex
 }
 
-//pri holder for a private key
+// pri holder for a private key
 type pri struct {
 	key *rsa.PrivateKey
 	mux sync.Mutex
 }
 
-//KeyPair holds jwt encryption/decryption keys
+// KeyPair holds jwt encryption/decryption keys
 type KeyPair struct {
 	pubKey *pub
 	priKey *pri
 }
 
-//GetPubKey returns the public key
+// GetPubKey returns the public key
 func (kp *KeyPair) GetPubKey() *rsa.PublicKey {
 	kp.pubKey.mux.Lock()
 	defer kp.pubKey.mux.Unlock()
 	return kp.pubKey.key
 }
 
-//GetPriKey returns the private key
+// GetPriKey returns the private key
 func (kp *KeyPair) GetPriKey() *rsa.PrivateKey {
 	kp.priKey.mux.Lock()
 	defer kp.priKey.mux.Unlock()
 	return kp.priKey.key
 }
 
-//newBucketKeyPair creates a new signing keypair from private/public keys stored in a GCP bucket
+// newBucketKeyPair creates a new signing keypair from private/public keys stored in a GCP bucket
 func newBucketKeyPair(ctx context.Context, bc lbcf.ConfigSetting) (*KeyPair, error) {
 	pk1 := new(pub)
 	pk2 := new(pri)
@@ -82,13 +82,13 @@ func newBucketKeyPair(ctx context.Context, bc lbcf.ConfigSetting) (*KeyPair, err
 	return keyPair, nil
 }
 
-//newLocalKeyPair creates a new signing keypair from private/public keys stored in local storage
+// newLocalKeyPair creates a new signing keypair from private/public keys stored in local storage
 func newLocalKeyPair(ctx context.Context, priKey, pubKey string) (*KeyPair, error) {
 	pk1 := new(pub)
 	pk2 := new(pri)
 	keyPair := &KeyPair{pubKey: pk1, priKey: pk2}
 
-	signBytes, err := ioutil.ReadFile(priKey)
+	signBytes, err := os.ReadFile(priKey)
 	if err != nil {
 		return nil, err
 	}
@@ -98,7 +98,7 @@ func newLocalKeyPair(ctx context.Context, priKey, pubKey string) (*KeyPair, erro
 		return nil, err
 	}
 
-	verifyBytes, err := ioutil.ReadFile(pubKey)
+	verifyBytes, err := os.ReadFile(pubKey)
 	if err != nil {
 		return nil, err
 	}
@@ -111,7 +111,7 @@ func newLocalKeyPair(ctx context.Context, priKey, pubKey string) (*KeyPair, erro
 	return keyPair, nil
 }
 
-//NewKeyPair creates a new signing keypair from private/public keys based on config settings
+// NewKeyPair creates a new signing keypair from private/public keys based on config settings
 func NewKeyPair(ctx context.Context, bc lbcf.ConfigSetting) (*KeyPair, error) {
 	preflight(ctx, bc)
 
@@ -138,7 +138,7 @@ func NewKeyPair(ctx context.Context, bc lbcf.ConfigSetting) (*KeyPair, error) {
 	return kpr, nil
 }
 
-//EncryptBytes uses the keypair to encrypt a byte array
+// EncryptBytes uses the keypair to encrypt a byte array
 func (kp *KeyPair) EncryptBytes(ctx context.Context, val []byte) (string, error) {
 	encmsg, err := rsa.EncryptPKCS1v15(rand.Reader, kp.GetPubKey(), val)
 	if err != nil {
@@ -150,7 +150,7 @@ func (kp *KeyPair) EncryptBytes(ctx context.Context, val []byte) (string, error)
 	return str, nil
 }
 
-//DecryptString uses the keypair to decrypt a base64 encrypted string
+// DecryptString uses the keypair to decrypt a base64 encrypted string
 func (kp *KeyPair) DecryptString(ctx context.Context, val string) (string, error) {
 	data, err := base64.StdEncoding.DecodeString(val)
 	if err != nil {
