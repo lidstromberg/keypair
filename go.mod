@@ -4,8 +4,8 @@ go 1.22
 
 require (
 	github.com/golang-jwt/jwt/v4 v4.5.0
-	github.com/lidstromberg/config v0.1.0
-	github.com/lidstromberg/storage v0.3.0
+	github.com/lidstromberg/config v0.2.0
+	github.com/lidstromberg/storage v0.4.0
 	golang.org/x/net v0.21.0
 )
 
